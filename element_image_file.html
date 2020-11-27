@@ -1,0 +1,250 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>360 Apparel Custom Hats</title>
+
+    <link rel="stylesheet" href="bootstrap_4/bootstrap.min.css">
+
+    <script src="https://unpkg.com/konva@7.2.0/konva.min.js"></script>
+
+    <!-- <script src="js/html2canvas.min.js"></script> -->
+
+    <script src="http://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://files.codepedia.info/files/uploads/iScripts/html2canvas.js"></script>
+
+
+    <style>
+
+    </style>
+
+
+</head>
+
+<body>
+
+<!------------------    THE MAGIC CONTAINER   --------------->
+
+<div id="html-content-holder" style="width:800px;background:blue;color:#00cc65;">hello</div>
+
+
+
+<div id="html-content-holder" style="width:800px;background:transparent;color:#00cc65;">
+
+
+        <img style="width:300px;height:300px;" src="cap_images/blank_hat.jpg" />
+
+
+        <div id="container"></div>  <!--  important! this is the movable swatch-->
+
+</div>
+
+<!------------------    THE MAGIC CONTAINER END  --------------->
+
+    <input id="btn-Preview-Image" type="button" value="Preview"/>
+    <a id="btn-Convert-Html2Image" href="#">Download</a>
+    <br/>
+    <h3>Preview :</h3>
+    <div id="previewImage"></div>
+
+
+
+
+    <script>
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+  
+        function update(activeAnchor) {
+          var group = activeAnchor.getParent();
+  
+          var topLeft = group.get('.topLeft')[0];
+          var topRight = group.get('.topRight')[0];
+          var bottomRight = group.get('.bottomRight')[0];
+          var bottomLeft = group.get('.bottomLeft')[0];
+          var image = group.get('Image')[0];
+  
+          var anchorX = activeAnchor.getX();
+          var anchorY = activeAnchor.getY();
+  
+          // update anchor positions
+          switch (activeAnchor.getName()) {
+            case 'topLeft':
+              topRight.y(anchorY);
+              bottomLeft.x(anchorX);
+              break;
+            case 'topRight':
+              topLeft.y(anchorY);
+              bottomRight.x(anchorX);
+              break;
+            case 'bottomRight':
+              bottomLeft.y(anchorY);
+              topRight.x(anchorX);
+              break;
+            case 'bottomLeft':
+              bottomRight.y(anchorY);
+              topLeft.x(anchorX);
+              break;
+          }
+  
+          image.position(topLeft.position());
+  
+          var width = topRight.getX() - topLeft.getX();
+          var height = bottomLeft.getY() - topLeft.getY();
+          if (width && height) {
+            image.width(width);
+            image.height(height);
+          }
+        }
+        function addAnchor(group, x, y, name) {
+          var stage = group.getStage();
+          var layer = group.getLayer();
+  
+          var anchor = new Konva.Circle({
+            x: x,
+            y: y,
+            stroke: '#666',
+            fill: '#ddd',
+            strokeWidth: 2,
+            radius: 8,
+            name: name,
+            draggable: true,
+            dragOnTop: true,
+          });
+  
+          anchor.on('dragmove', function () {
+            update(this);
+            layer.draw();
+          });
+          anchor.on('mousedown touchstart', function () {
+            group.draggable(false);
+            this.moveToTop();
+          });
+          anchor.on('dragend', function () {
+            group.draggable(true);
+            layer.draw();
+          });
+          // add hover styling
+          anchor.on('mouseover', function () {
+            var layer = this.getLayer();
+            document.body.style.cursor = 'pointer';
+            this.strokeWidth(4);
+            layer.draw();
+          });
+          anchor.on('mouseout', function () {
+            var layer = this.getLayer();
+            document.body.style.cursor = 'default';
+            this.strokeWidth(2);
+            layer.draw();
+          });
+  
+          group.add(anchor);
+        }
+  
+        var stage = new Konva.Stage({
+          container: 'container',
+          width: width,
+          height: height,
+        });
+  
+        var layer = new Konva.Layer();
+        stage.add(layer);
+  
+        /* darth vader
+        var darthVaderImg = new Konva.Image({
+          width: 200,
+          height: 137,
+        });
+  */
+        // yoda
+        var yodaImg = new Konva.Image({
+          width: 93,
+          height: 104,
+        });
+  /*
+        var darthVaderGroup = new Konva.Group({
+          x: 580,
+          y: 50,
+          draggable: true,
+        });
+        layer.add(darthVaderGroup);
+        darthVaderGroup.add(darthVaderImg);
+        addAnchor(darthVaderGroup, 0, 0, 'topLeft');
+        addAnchor(darthVaderGroup, 200, 0, 'topRight');
+        addAnchor(darthVaderGroup, 200, 138, 'bottomRight');
+        addAnchor(darthVaderGroup, 0, 138, 'bottomLeft');
+  */
+        var yodaGroup = new Konva.Group({
+          x: 20,
+          y: 110,
+          draggable: true,
+        });
+        layer.add(yodaGroup);
+        yodaGroup.add(yodaImg);
+        addAnchor(yodaGroup, 0, 0, 'topLeft');
+        addAnchor(yodaGroup, 93, 0, 'topRight');
+        addAnchor(yodaGroup, 93, 104, 'bottomRight');
+        addAnchor(yodaGroup, 0, 104, 'bottomLeft');
+  
+        /*
+        var imageObj1 = new Image();
+        imageObj1.onload = function () {
+          darthVaderImg.image(imageObj1);
+          layer.draw();
+        };
+        imageObj1.src = 'cap_images/1106-WhiteClNavy-2-C838whiteclassicnavyfullfront-337W.jpg';
+  */
+        var imageObj2 = new Image();
+        imageObj2.onload = function () {
+          yodaImg.image(imageObj2);
+          layer.draw();
+        };
+        imageObj2.src = 'cap_images/1106-WhiteClNavy-1-C838WhiteClassicNavyFront092309-337W.jpg';
+      </script>
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+$(document).ready(function(){
+
+	
+var element = $("#html-content-holder"); // global variable
+var getCanvas; // global variable
+ 
+    $("#btn-Preview-Image").on('click', function () {
+         html2canvas(element, {
+         onrendered: function (canvas) {
+                $("#previewImage").append(canvas);
+                getCanvas = canvas;
+             }
+         });
+    });
+
+	$("#btn-Convert-Html2Image").on('click', function () {
+    var imgageData = getCanvas.toDataURL("image/png");
+    // Now browser starts downloading it instead of just showing it
+    var newData = imgageData.replace(/^data:image\/png/, "data:application/octet-stream");
+    $("#btn-Convert-Html2Image").attr("download", "your_pic_name.png").attr("href", newData);
+	});
+
+});
+
+</script>
+</body>
+</html>
